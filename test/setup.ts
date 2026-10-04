@@ -1,0 +1,4 @@
+process.env.GCLOUD_PROJECT ||= 'demo-test';
+process.env.FIREBASE_AUTH_EMULATOR_HOST ||= '127.0.0.1:9199';
+process.env.FIRESTORE_EMULATOR_HOST ||= '127.0.0.1:8180';
+process.env.FIREBASE_DATABASE_EMULATOR_HOST ||= '127.0.0.1:9100';

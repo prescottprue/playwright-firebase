@@ -1,0 +1,31 @@
+{
+  "name": "playwright-firebase-example-basic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "emulators": "firebase emulators:start --only auth,firestore,database",
+    "test:e2e": "firebase emulators:exec --only auth,firestore,database \"playwright test\"",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "firebase": "^12.19.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "firebase-admin": "^14.5.0",
+    "firebase-tools": "^15.32.1",
+    "oxlint": "^1.81.0",
+    "playwright-firebase": "file:../..",
+    "vite": "^8.3.0"
+  }
+}
