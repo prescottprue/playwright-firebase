@@ -208,12 +208,15 @@ npm run example:test
 ## Development
 
 ```bash
-npm run build    # tsc -> lib/
-npm test         # unit tests inside the auth, firestore and database emulators
-npm run check    # biome lint + format check
+npm run build         # tsc -> lib/
+npm test              # unit tests inside the auth, firestore and database emulators
+npm run test:cov      # unit tests with coverage
+npm run lint          # biome lint (lint:fix to fix)
+npm run format:check  # biome format check (format to fix)
+npm run size          # build + size-limit check
 ```
 
-Java is required for the Firestore and Realtime Database emulators.
+Node 24 (see `.nvmrc`) and Java are required (Java for the Firestore and Realtime Database emulators). Git hooks are managed by [lefthook](https://lefthook.dev) and installed on `npm install`: staged files are checked with Biome, and commit messages must follow [conventional commits](https://www.conventionalcommits.org) since releases are published by semantic-release.
 
 ## License
 

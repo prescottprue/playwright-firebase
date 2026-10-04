@@ -12,7 +12,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run build          # tsc -> lib/ (examples import the built lib/, so rebuild before running them)
 npm test               # unit tests (vitest) inside auth/firestore/database emulators
 npm run test:base      # unit tests without starting emulators (expects `npm run emulators`)
-npm run check          # biome lint + format check (biome check --write to fix)
+npm run test:cov       # unit tests with coverage
+npm run lint           # biome lint (lint:fix to fix)
+npm run format:check   # biome format check (format to fix)
+npm run size           # build + size-limit (10kb budget per export)
 npm run example:test   # build, then run examples/basic Playwright suite inside emulators
 ```
 
@@ -33,6 +36,8 @@ Unlike cypress-firebase there is no browser/Node task split: Playwright tests ru
 Public API is only what `src/index.ts` exports.
 
 ## Conventions
+
+- Node 24 (`.nvmrc`), npm workspaces. Commits must follow conventional commits (commitlint via lefthook `commit-msg` hook; `pre-commit` runs Biome on staged files). Releases are automated by semantic-release in `.github/workflows/publish.yml`, so the commit type determines the published version. `verify.yml` runs lint, format, coverage, build and size-limit on PRs.
 
 - Biome for lint + format (single quotes, spaces). `console` is a lint error; intentional logging uses `// biome-ignore lint/suspicious/noConsole: Intentional logging`. `examples/` is excluded from Biome (the example uses Vite's oxlint).
 - Example e2e tests run fully parallel against shared emulators, so scope data per test (e.g. UID from `testInfo.testId`) instead of clearing whole emulators.

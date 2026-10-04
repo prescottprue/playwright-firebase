@@ -1,0 +1,17 @@
+{
+  "name": "playwright-firebase",
+  "platforms": ["Web"],
+  "content": "README.md",
+  "related": [
+    "firebase/firebase-js-sdk",
+    "firebase/firebase-admin-node",
+    "microsoft/playwright"
+  ],
+  "tabs": [
+    { "title": "NPM", "href": "https://npmjs.com/package/playwright-firebase" },
+    {
+      "title": "API Reference",
+      "href": "https://github.com/prescottprue/playwright-firebase/blob/main/README.md"
+    }
+  ]
+}

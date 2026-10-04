@@ -1,0 +1,83 @@
+name: NPM Package Publish
+
+on:
+  push:
+    branches:
+      - main
+      - next
+      - beta
+      - alpha
+      - '[0-9]+.x' # maintenance releases
+
+concurrency:
+  group: publish-${{ github.ref }}
+
+env:
+  NODE_VERSION: 24.x
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Use Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Use Java 25 (required by firebase-tools emulators)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Get cache settings
+        id: cache-settings
+        run: |
+          fbToolsVersion=$(npm pkg get devDependencies.firebase-tools | tr -d '"')
+          echo "firebase-tools version $fbToolsVersion"
+          echo "firebase-tools=$fbToolsVersion" >> $GITHUB_OUTPUT
+
+      - name: Cache Firebase Emulator Binaries
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
+
+      - name: Configure package manager
+        run: npm config set '//registry.npmjs.org/:_authToken' ${{ secrets.NPM_TOKEN }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v6.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          semantic_version: ^25.0.0
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'main',
+              'next',
+              {name: 'beta', prerelease: true},
+              {name: 'alpha', prerelease: true}
+            ]
+
+      - name: Run Unit Tests + Coverage
+        run: npm run test:cov
+
+      - name: Upload Test Coverage
+        uses: codecov/codecov-action@v7
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

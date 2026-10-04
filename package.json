@@ -23,28 +23,38 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "format": "biome format --write",
+    "format:check": "biome format",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
-    "check": "biome check",
     "test:base": "vitest run",
+    "test:cov:base": "vitest run --coverage",
     "test:watch": "vitest",
     "emulators": "firebase emulators:start --only auth,firestore,database --project demo-test",
     "test": "firebase emulators:exec --only auth,firestore,database --project demo-test \"npm run test:base\"",
-    "example:test": "npm run build && npm run test:e2e --workspace examples/basic"
+    "test:cov": "firebase emulators:exec --only auth,firestore,database --project demo-test \"npm run test:cov:base\"",
+    "example:test": "npm run build && npm run test:e2e --workspace examples/basic",
+    "size": "npm run build && size-limit",
+    "prepare": "lefthook install"
   },
   "peerDependencies": {
     "@playwright/test": ">=1.40.0",
     "firebase-admin": ">=12.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
-    "@playwright/test": "^1.63.0",
-    "@types/node": "^22.20.5",
-    "firebase-admin": "^14.5.0",
-    "firebase-tools": "^15.32.1",
-    "rimraf": "^6.1.3",
-    "typescript": "^7.0.2",
-    "vitest": "^5.0.3"
+    "@biomejs/biome": "2.5.15",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@playwright/test": "1.63.0",
+    "@size-limit/preset-small-lib": "14.1.0",
+    "@types/node": "24.19.1",
+    "@vitest/coverage-v8": "5.0.3",
+    "firebase-admin": "14.5.0",
+    "firebase-tools": "15.32.1",
+    "lefthook": "2.1.16",
+    "rimraf": "6.1.3",
+    "size-limit": "14.1.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
   },
   "keywords": [
     "playwright",
@@ -58,7 +68,34 @@
     "name": "Prescott Prue",
     "url": "https://github.com/prescottprue"
   },
-  "engines": {
-    "node": ">=20"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prescottprue/playwright-firebase.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prescottprue/playwright-firebase/issues"
+  },
+  "homepage": "https://github.com/prescottprue/playwright-firebase#readme",
+  "size-limit": [
+    {
+      "name": "PlaywrightFirebase",
+      "path": "lib/index.js",
+      "import": "{ PlaywrightFirebase }",
+      "limit": "10kb",
+      "ignore": [
+        "firebase-admin",
+        "@playwright/test"
+      ]
+    },
+    {
+      "name": "withFirebase",
+      "path": "lib/index.js",
+      "import": "{ withFirebase }",
+      "limit": "10kb",
+      "ignore": [
+        "firebase-admin",
+        "@playwright/test"
+      ]
+    }
+  ]
 }

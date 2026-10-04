@@ -6,5 +6,9 @@ export default defineConfig({
     include: ['test/**/*.spec.ts'],
     setupFiles: ['./test/setup.ts'],
     testTimeout: 10000,
+    coverage: {
+      include: ['src/**'],
+      reporter: ['lcov', 'html'],
+    },
   },
 });

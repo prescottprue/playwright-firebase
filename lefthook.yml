@@ -1,0 +1,12 @@
+# Git hooks (installed by the "prepare" script). See https://lefthook.dev/configuration/
+pre-commit:
+  jobs:
+    - name: biome
+      glob: '*.{js,ts,json,md,yaml,yml}'
+      run: npx biome check --no-errors-on-unmatched --files-ignore-unknown=true --write {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: npx commitlint --edit {1}
